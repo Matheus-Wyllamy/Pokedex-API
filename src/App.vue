@@ -1,18 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="column is-half is-offset-one-quarter">
+      <hr>
+      <h4 class="is-size-4">Pokedex</h4>
+      
+       <div v-for="(poke, index) in pokemons" :key="index">
+      <Pokemon :name="poke.name" :url="poke.url" :num="index+1"/>
+    </div>
+
+    </div>
+   
+    
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios';
+import Pokemon from "./components/Pokemon"
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data(){
+    return {
+      pokemons: [],
+      filteredPokemons: [],
+      busca: ''
+
+    }
+
+  },
+  created: function(){
+  axios.get("https://pokeapi.co/api/v2/pokemon/?limit=151&offset=0").then(res => {
+    console.log("Pegou a lista de pokemon")
+    this.pokemons = res.data.results;
+    this.filteredPokemons = res.data.results;
+   
+  })
+  }, 
+components: {
+  Pokemon
+}, 
+computed: {
+
+}
 }
 </script>
 
@@ -24,5 +54,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#buscaBtn {
+  margin-top: 2%;
 }
 </style>
